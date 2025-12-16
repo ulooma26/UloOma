@@ -130,7 +130,7 @@
 
     <!-- Reserve Button -->
     <div class="px-6 mt-10 pb-8">
-      <button onclick="window.location.href='card payment reservation.html'" class="w-full bg-[#20ACB3] hover:bg-black cursor-pointer text-white font-semibold text-lg py-5 rounded-2xl transition">
+      <button onclick="openPaymentModal()" class="w-full bg-[#20ACB3] hover:bg-black cursor-pointer text-white font-semibold text-lg py-5 rounded-2xl transition">
         Reserve Now (₦2000)
       </button>
       <p class="text-center text-gray-400 text-xs mt-3">
@@ -149,16 +149,40 @@
     </div>
   </div>
 
+  <!-- Payment Choice Modal -->
+  <div id="paymentModal" class="fixed inset-0 bg-black/50 z-50 hidden items-center justify-center">
+    <div class="relative w-11/12 max-w-md">
+      <div class="bg-white rounded-2xl p-6 shadow-lg">
+        <button id="paymentClose" class="absolute -top-4 right-4 text-gray-700 text-3xl">×</button>
+        <h3 class="text-lg font-semibold mb-4">Choose payment method</h3>
+        <div class="flex flex-col gap-3">
+          <button id="cardOption" class="w-full bg-[#20ACB3] text-white py-3 rounded-xl">Pay with Card</button>
+          <button id="bankOption" class="w-full border-2 border-[#20ACB3] text-[#20ACB3] py-3 rounded-xl">Bank Transfer</button>
+        </div>
+        <div id="bankInfo" class="mt-4 hidden bg-gray-50 p-4 rounded">
+          <p class="text-sm text-gray-700">Account Name: ULO OMA</p>
+          <p class="text-sm text-gray-700">Account Number: <span id="acct">1234567890</span></p>
+          <p class="text-sm text-gray-700">Bank: Signature Bank</p>
+          <div class="mt-3 flex gap-2">
+            <button id="copyAcct" class="bg-[#20ACB3] text-white px-3 py-2 rounded">Copy</button>
+            <button id="doneBank" class="border border-gray-300 px-3 py-2 rounded">Done</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
   
   <script>
     // 8 images
     const images = [
       "./image/explore.jpg",                 
-      "./image/explore.jpg",                    
-      "./image/explore.jpg",
-      "./image/explore.jpg",
-      "./image/explore.jpg",
-      "./image/explore.jpg",
+      "./image/first.jpg",                    
+      "./image/second.jpg",
+      "./image/third.png",
+      "./image/Hero.png",
+      "./image/Hero2.png",
+      "./image/Hero3.jpg",
       "./image/explore.jpg"
     ];
 
@@ -203,6 +227,37 @@
     });
 
     show(); // first load
+  </script>
+
+  <script>
+    // Payment modal handlers
+    function openPaymentModal(){
+      document.getElementById('paymentModal').classList.remove('hidden');
+    }
+    function closePaymentModal(){
+      document.getElementById('paymentModal').classList.add('hidden');
+      // reset bank info view
+      document.getElementById('bankInfo').classList.add('hidden');
+    }
+
+    document.getElementById('paymentClose').onclick = closePaymentModal;
+    document.getElementById('cardOption').onclick = function(){
+      // go to card payment page
+      window.location.href = 'card payment reservation.html';
+    };
+    document.getElementById('bankOption').onclick = function(){
+      // show bank transfer details
+      document.getElementById('bankInfo').classList.remove('hidden');
+    };
+    document.getElementById('doneBank').onclick = closePaymentModal;
+    document.getElementById('copyAcct').onclick = function(){
+      const acct = document.getElementById('acct').textContent;
+      navigator.clipboard?.writeText(acct).then(()=>{
+        alert('Account number copied');
+      }).catch(()=>{ alert('Copy failed'); });
+    };
+    // Close when clicking outside modal content
+    document.getElementById('paymentModal').onclick = function(e){ if(e.target === e.currentTarget) closePaymentModal(); };
   </script>
 
 </body>
